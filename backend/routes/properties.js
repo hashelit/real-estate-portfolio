@@ -1,6 +1,11 @@
 import express from "express";
 import Property from "../models/Property.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import upload from "../middleware/upload.js";
+
+router.post("/upload", upload.single("document"), (req, res) => {
+    res.json({ filePath: `/uploads/${req.file.filename}` });
+});
 
 const router = express.Router();
 
@@ -20,5 +25,6 @@ router.get("/", authMiddleware, async (req, res) => {
     const properties = await Property.find({ owner: req.user.id });
     res.json(properties);
 });
+
 
 export default router;
